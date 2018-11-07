@@ -1,0 +1,3 @@
+rootProject.name = 'GeoMeetApp'
+
+include ':app'
