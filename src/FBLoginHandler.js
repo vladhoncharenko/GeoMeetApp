@@ -1,7 +1,7 @@
-export function OnFBLogin(event) {
-    console.log(event);
-};
-
-export function OnFBLoginFound(event){
+import { AsyncStorage } from "react-native"
+ 
+ export async function OnFBLogin(event)  {
+    await AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
+    
     console.log(event);
 };
