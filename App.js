@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login';
-import { OnFBLogin, OnFBLoginFound } from './src/FBLoginHandler.js';
+import { OnFBLogin } from './src/FBLoginHandler.js';
 import { AsyncStorage, View, Text } from "react-native";
-let FBLoginView = require('./src/FBLoginView.js');
-let GreetingsView = require('./src/GreetingsView.js');
-let MainView = require('./src/MainView.js');
+let FBLoginComponent = require('./src/Components/FBLogin.js');
+let Greetings = require('./src/Components/Greetings.js');
+let Main = require('./src/Components/Main.js');
 
 export default class App extends Component {
 
@@ -30,17 +30,18 @@ export default class App extends Component {
   }
 
   render() {
+    console.disableYellowBox = true; // ToDo: Remove
     if (this.state.loaded) {
       if (this.state.isLoggedIn) {
         if (this.state.isTutorialCompleted) {
-          return (<MainView />);
+          return (<Main />);
         } else {
-          return (<GreetingsView isTutorialCompleted={this.state.isTutorialCompleted} />);
+          return (<Greetings isTutorialCompleted={this.state.isTutorialCompleted} />);
         }
       }
       else {
         return (<FBLogin
-          buttonView={<FBLoginView isTutorialCompleted={this.state.isTutorialCompleted} />}
+          buttonView={<FBLoginComponent isTutorialCompleted={this.state.isTutorialCompleted} />}
           ref={(fbLogin) => { this.fbLogin = fbLogin }}
           loginBehavior={FBLoginManager.LoginBehaviors.Native}
           permissions={["email"]}

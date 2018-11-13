@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { View, Button } from 'react-native';
 import PropTypes from 'prop-types';
 import RNRestart from 'react-native-restart';
-let MainView = require('./MainView.js');
+let Main = require('./Main.js');
 
-class FBLoginView extends Component {
+class FBLogin extends Component {
   static contextTypes = {
     isLoggedIn: PropTypes.bool,
     login: PropTypes.func,
@@ -30,7 +30,7 @@ class FBLoginView extends Component {
       </View>
     } else {
       if (this.props.isTutorialCompleted) {
-        return (<MainView />);
+        return (<Main />);
       } else {
         try {
           return null;
@@ -43,4 +43,4 @@ class FBLoginView extends Component {
   }
 }
 
-module.exports = FBLoginView;
+module.exports = FBLogin;
