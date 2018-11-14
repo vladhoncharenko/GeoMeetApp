@@ -19,9 +19,9 @@ export default class App extends Component {
   }
 
   async componentDidMount() {
-    isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+    let isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
     isLoggedIn = isLoggedIn === null ? false : true;
-    isTutorialCompleted = await AsyncStorage.getItem('isTutorialCompleted');
+    let isTutorialCompleted = await AsyncStorage.getItem('isTutorialCompleted');
     isTutorialCompleted = isTutorialCompleted === null ? false : true;
 
     await this.setStateAsync({ isLoggedIn: JSON.parse(isLoggedIn) });

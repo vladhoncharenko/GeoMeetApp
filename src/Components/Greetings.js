@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, AsyncStorage, View } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 let Main = require('./Main.js');
+import Radar from 'react-native-radar';
 
 const styles = StyleSheet.create({
   image: {
@@ -43,6 +44,14 @@ class Geetings extends React.Component {
     this.state = {
       isTutorialCompleted: this.props.isTutorialCompleted
     }
+  }
+  
+  componentDidMount() {
+    Radar.getPermissionsStatus().then((status) => {
+      if (status === "DENIED" || status === "UNKNOWN") {
+        Radar.requestPermissions(true);
+      }
+    });
   }
 
   _onDone = async () => {

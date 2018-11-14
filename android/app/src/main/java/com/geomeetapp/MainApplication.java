@@ -3,6 +3,7 @@ package com.geomeetapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.radar.react.RNRadarPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.facebook.react.ReactNativeHost;
@@ -13,6 +14,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 import com.magus.fblogin.FacebookLoginPackage;
+import io.radar.sdk.Radar;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -26,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNRadarPackage(),
             new VectorIconsPackage(),
             new ReactNativeRestartPackage(),
           new FacebookLoginPackage()
@@ -45,7 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
 
   @Override
   public void onCreate() {
-    super.onCreate();
+    Radar.initialize("prj_test_pk_b902525b61d54d4fd7c0afe720cb497c4e9830ec");
     SoLoader.init(this, /* native exopackage */ false);
   }
 }
