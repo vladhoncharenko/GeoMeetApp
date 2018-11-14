@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">GeoMeetApp</string>
-    <string name="fb_app_id">2109377152453902</string>
-    <string name="fb_login_protocol_scheme">fb2109377152453902</string>
-    <string name="radarPublishableKey">prj_test_pk_b902525b61d54d4fd7c0afe720cb497c4e9830ec</string>
-    <string name="facebook_client_token">8800ff15c396631f9304be75579b28bc</string>
+    <string name="fb_app_id"></string>
+    <string name="fb_login_protocol_scheme"></string>
+    <string name="radarPublishableKey"></string>
+    <string name="facebook_client_token"></string>
 </resources>

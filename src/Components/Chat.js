@@ -14,13 +14,16 @@ class Chat extends React.Component {
         let user = await AsyncStorage.getItem('user');
         user = JSON.parse(user);
         isRadarInit = isRadarInit === null ? false : true;
+        console.log("User:", user);
         if (!isRadarInit) {
             Radar.setUserId(user.id);
-            Radar.setPlacesProvider('none');
+            Radar.setPlacesProvider('facebook');
             Radar.startTracking();
             AsyncStorage.setItem('isRadarInit', JSON.stringify(true));
         }
-        Radar.trackOnce().then().catch((err) => {
+        Radar.trackOnce().then((res) => {
+            console.log("TrackOnce result:", res);
+        }).catch((err) => {
             console.log("TrackOnce error:", err);
         });
     }
