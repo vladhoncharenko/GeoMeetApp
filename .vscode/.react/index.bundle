@@ -82398,11 +82398,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   function OnFBLogin(event) {
     _reactNative.AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
 
-    console.log(event.profile);
-
     _reactNative.AsyncStorage.setItem('user', JSON.stringify(event.profile));
 
-    console.log(event);
+    console.log("FB event:", event);
   }
 
   ;
@@ -101609,22 +101607,25 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                 user = _context.sent;
                 user = JSON.parse(user);
                 isRadarInit = isRadarInit === null ? false : true;
+                console.log("User:", user);
 
                 if (!isRadarInit) {
                   _reactNativeRadar.default.setUserId(user.id);
 
-                  _reactNativeRadar.default.setPlacesProvider('none');
+                  _reactNativeRadar.default.setPlacesProvider('facebook');
 
                   _reactNativeRadar.default.startTracking();
 
                   _reactNative.AsyncStorage.setItem('isRadarInit', JSON.stringify(true));
                 }
 
-                _reactNativeRadar.default.trackOnce().then().catch(function (err) {
+                _reactNativeRadar.default.trackOnce().then(function (res) {
+                  console.log("TrackOnce result:", res);
+                }).catch(function (err) {
                   console.log("TrackOnce error:", err);
                 });
 
-              case 10:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -101637,12 +101638,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         return _react.default.createElement(_reactNative.View, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 29
+            lineNumber: 32
           }
         }, _react.default.createElement(_reactNative.Text, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 29
+            lineNumber: 32
           }
         }, "\u0427\u0430\u0442"));
       }
@@ -104609,13 +104610,17 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var _inherits2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "@babel/runtime/helpers/inherits"));
 
-  var _react = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "react"));
+  var _assertThisInitialized2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "@babel/runtime/helpers/assertThisInitialized"));
 
-  var _index = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "./../../node_modules/react-transform-hmr/lib/index.js"));
+  var _react = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "react"));
 
-  var _MaterialIcons = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "react-native-vector-icons/MaterialIcons"));
+  var _index = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "./../../node_modules/react-transform-hmr/lib/index.js"));
 
-  var _reactNative = _$$_REQUIRE(_dependencyMap[9], "react-native");
+  var _MaterialIcons = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "react-native-vector-icons/MaterialIcons"));
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[10], "react-native");
+
+  var _reactNativeTimelineListview = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[11], "react-native-timeline-listview"));
 
   var _jsxFileName = "/Users/vladhoncharenko/Projects/GeoMeetApp/node_modules/react-native/src/Components/Meetings.js";
   var _components = {
@@ -104641,24 +104646,223 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     (0, _inherits2.default)(Meetings, _React$Component);
 
     function Meetings() {
+      var _this;
+
       (0, _classCallCheck2.default)(this, Meetings);
-      return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Meetings).apply(this, arguments));
+      _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Meetings).call(this));
+      _this.state = {
+        isRefreshing: false,
+        waiting: false,
+        data: [],
+        selected: null,
+        noResults: false,
+        isLoading: true
+      };
+      _this.onEventPress = _this.onEventPress.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+      _this.renderDetail = _this.renderDetail.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+      _this.onRefresh = _this.onRefresh.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+
+      _this.setData();
+
+      return _this;
     }
 
     (0, _createClass2.default)(Meetings, [{
+      key: "onRefresh",
+      value: function onRefresh() {
+        var _this2 = this;
+
+        this.setState({
+          isRefreshing: true
+        });
+        setTimeout(function () {
+          var results = [{
+            userId: '5',
+            time: '16:30 12.10',
+            title: 'Анна Тутова',
+            description: 'Look out for the Best Gym & Fitness Centers.\nAround me :)',
+            imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240422/20d84f6c-0fe4-11e7-8f1d-9dbc594d0cfa.jpg'
+          }];
+
+          _this2.setState({
+            data: results,
+            isRefreshing: false,
+            noResults: results.length > 0 ? false : true
+          });
+        }, 2000);
+      }
+    }, {
+      key: "setData",
+      value: function setData() {
+        var _this3 = this;
+
+        var results = [{
+          userId: '1',
+          time: '09:00 13.10',
+          title: 'Vlad Honcharenko',
+          description: 'The Beginner Archery and Beginner.\nCrossbow course does not require you to bring any equipment, since everything you need will be provided for the course. ',
+          imageUrl: 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=594213414366528&height=50&width=50&ext=1544810051&hash=AeS4SzbYOQcHnYSs'
+        }, {
+          userId: '2',
+          time: '10:45 13.10',
+          title: 'Anton Badminton',
+          description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.',
+          imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240405/0ba41234-0fe4-11e7-919b-c3f88ced349c.jpg'
+        }, {
+          userId: '3',
+          time: '10:45 13.10',
+          title: 'Дмитро Токар',
+          description: 'Badminton is a racquet sport.\nPlayed using racquets to hit a shuttlecock across a net.',
+          imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240405/0ba41234-0fe4-11e7-919b-c3f88ced349c.jpg'
+        }, {
+          userId: '4',
+          time: '14:00 12.10',
+          title: 'Антон Петров',
+          description: 'Team sport.\nPlayed between two teams of eleven players with a spherical ball. ',
+          imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240419/1f553dee-0fe4-11e7-8638-6025682232b1.jpg'
+        }, {
+          userId: '5',
+          time: '16:30 12.10',
+          title: 'Петро Антонов',
+          description: 'Look out for the Best Gym & Fitness.\nCenters around me :)',
+          imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240422/20d84f6c-0fe4-11e7-8f1d-9dbc594d0cfa.jpg'
+        }, {
+          userId: '4',
+          time: '14:00 12.10',
+          title: 'Watch Soccer',
+          description: 'Team sport.\nPlayed between two teams of eleven players with a spherical ball.',
+          imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240419/1f553dee-0fe4-11e7-8638-6025682232b1.jpg'
+        }, {
+          userId: '5',
+          time: '16:30 12.10',
+          title: 'Анна Тутова',
+          description: 'Look out for the Best Gym & Fitness Centers.\nAround me :)',
+          imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240422/20d84f6c-0fe4-11e7-8f1d-9dbc594d0cfa.jpg'
+        }];
+        setTimeout(function () {
+          _this3.setState({
+            data: results,
+            isLoading: false,
+            noResults: results.length > 0 ? false : true
+          });
+        }, 5000);
+      }
+    }, {
+      key: "onEventPress",
+      value: function onEventPress(data) {
+        this.setState({
+          selected: data
+        });
+      }
+    }, {
+      key: "renderDetail",
+      value: function renderDetail(rowData, sectionID, rowID) {
+        var title = _react.default.createElement(_reactNative.Text, {
+          style: [styles.title],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 114
+          }
+        }, rowData.title);
+
+        var desc = null;
+        if (rowData.description && rowData.imageUrl) desc = _react.default.createElement(_reactNative.View, {
+          style: styles.descriptionContainer,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 118
+          }
+        }, _react.default.createElement(_reactNative.Image, {
+          source: {
+            uri: rowData.imageUrl
+          },
+          style: styles.image,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 119
+          }
+        }), _react.default.createElement(_reactNative.Text, {
+          style: [styles.textDescription],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 120
+          }
+        }, rowData.description));
+        return _react.default.createElement(_reactNative.View, {
+          style: {
+            flex: 1
+          },
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 125
+          }
+        }, title, desc);
+      }
+    }, {
       key: "render",
       value: function render() {
         return _react.default.createElement(_reactNative.View, {
+          style: styles.container,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 12
+            lineNumber: 133
           }
-        }, _react.default.createElement(_reactNative.Text, {
+        }, this.state.isLoading ? _react.default.createElement(_reactNative.Text, {
+          style: [styles.promt],
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 12
+            lineNumber: 134
           }
-        }, "\u0417\u043D\u0430\u0439\u043E\u043C\u0441\u0442\u0432\u0430"));
+        }, "\u0417\u0430\u0432\u0430\u043D\u0442\u0430\u0436\u0435\u043D\u043D\u044F...") : this.state.noResults ? _react.default.createElement(_reactNative.Text, {
+          style: [styles.promt],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 135
+          }
+        }, "\u0412\u0438 \u0449\u0435 \u043D\u0435 \u0437 \u043A\u0438\u043C \u043D\u0435 \u0437\u0443\u0441\u0442\u0440\u0456\u043B\u0438\u0441\u044F...") : null, _react.default.createElement(_reactNativeTimelineListview.default, {
+          style: styles.list,
+          data: this.state.data,
+          circleSize: 20,
+          circleColor: "rgba(250,88,66,12)",
+          lineColor: "rgb(45,156,219)",
+          timeContainerStyle: {
+            minWidth: 52,
+            marginTop: -5
+          },
+          timeStyle: {
+            textAlign: 'center',
+            backgroundColor: '#ff9797',
+            color: 'white',
+            padding: 5,
+            marginTop: 10,
+            borderRadius: 13
+          },
+          descriptionStyle: {
+            color: 'gray'
+          },
+          options: {
+            style: {
+              paddingTop: 5
+            },
+            refreshControl: _react.default.createElement(_reactNative.RefreshControl, {
+              refreshing: this.state.isRefreshing,
+              onRefresh: this.onRefresh,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 148
+              }
+            })
+          },
+          innerCircle: 'icon',
+          onEventPress: this.onEventPress,
+          renderDetail: this.renderDetail,
+          innerCircle: 'dot',
+          separator: true,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 136
+          }
+        }));
       }
     }]);
     return Meetings;
@@ -104673,14 +104877,576 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         name: "people",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 8
+          lineNumber: 9
         }
       });
     }
   };
   Meetings = _wrapComponent("Meetings")(Meetings);
+
+  var styles = _reactNative.StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingLeft: 20,
+      paddingRight: 20,
+      marginTop: 5,
+      backgroundColor: 'white'
+    },
+    list: {
+      flex: 1
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: 'bold'
+    },
+    promt: {
+      textAlign: 'center',
+      fontSize: 20,
+      fontWeight: 'bold'
+    },
+    descriptionContainer: {
+      flexDirection: 'row',
+      paddingRight: 50
+    },
+    image: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+      marginTop: 3
+    },
+    textDescription: {
+      marginLeft: 10,
+      color: 'gray'
+    }
+  });
+
   module.exports = Meetings;
-},553,[1,114,115,122,123,125,138,256,680,2],"src/Components/Meetings.js");
+},553,[1,114,115,122,123,125,129,138,256,680,2,738],"src/Components/Meetings.js");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  "use strict";
+
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+
+  var _interopRequireWildcard = _$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/interopRequireWildcard");
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _extends2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/extends"));
+
+  var _classCallCheck2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "@babel/runtime/helpers/classCallCheck"));
+
+  var _createClass2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "@babel/runtime/helpers/createClass"));
+
+  var _possibleConstructorReturn2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "@babel/runtime/helpers/possibleConstructorReturn"));
+
+  var _getPrototypeOf2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "@babel/runtime/helpers/getPrototypeOf"));
+
+  var _inherits2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "@babel/runtime/helpers/inherits"));
+
+  var _assertThisInitialized2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "@babel/runtime/helpers/assertThisInitialized"));
+
+  var _react = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[9], "react"));
+
+  var _index = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[10], "./../../react-transform-hmr/lib/index.js"));
+
+  var _reactNative = _$$_REQUIRE(_dependencyMap[11], "react-native");
+
+  var _jsxFileName = "/Users/vladhoncharenko/Projects/GeoMeetApp/node_modules/react-native/node_modules/react-native-timeline-listview/lib/index.js";
+  var _components = {
+    Timeline: {
+      displayName: "Timeline"
+    }
+  };
+
+  var _reactTransformHmrLibIndexJs2 = (0, _index.default)({
+    filename: "/Users/vladhoncharenko/Projects/GeoMeetApp/node_modules/react-native/node_modules/react-native-timeline-listview/lib/index.js",
+    components: _components,
+    locals: [module],
+    imports: [_react.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _reactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var ds = new _reactNative.ListView.DataSource({
+    rowHasChanged: function rowHasChanged(r1, r2) {
+      return r1 !== r2;
+    },
+    sectionHeaderHasChanged: function sectionHeaderHasChanged(s1, s2) {
+      return s1 !== s2;
+    }
+  });
+  var defaultCircleSize = 16;
+  var defaultCircleColor = "#007AFF";
+  var defaultLineWidth = 2;
+  var defaultLineColor = "#007AFF";
+  var defaultTimeTextColor = "black";
+  var defaultDotColor = "white";
+  var defaultInnerCircle = "none";
+
+  var Timeline = _wrapComponent("Timeline")(function (_Component) {
+    (0, _inherits2.default)(Timeline, _Component);
+
+    function Timeline(props, context) {
+      var _this;
+
+      (0, _classCallCheck2.default)(this, Timeline);
+      _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Timeline).call(this, props, context));
+      _this._renderRow = _this._renderRow.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+      _this.renderTime = (_this.props.renderTime ? _this.props.renderTime : _this._renderTime).bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+      _this.renderDetail = (_this.props.renderDetail ? _this.props.renderDetail : _this._renderDetail).bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+      _this.renderCircle = (_this.props.renderCircle ? _this.props.renderCircle : _this._renderCircle).bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+      _this.renderEvent = _this._renderEvent.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+      _this.state = {
+        data: _this.props.data,
+        dataSource: ds.cloneWithRows(_this.props.data),
+        x: 0,
+        width: 0
+      };
+      return _this;
+    }
+
+    (0, _createClass2.default)(Timeline, [{
+      key: "componentWillReceiveProps",
+      value: function componentWillReceiveProps(nextProps) {
+        this.setState({
+          data: nextProps.data,
+          dataSource: ds.cloneWithRows(nextProps.data)
+        });
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        return _react.default.createElement(_reactNative.View, {
+          style: [styles.container, this.props.style],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 62
+          }
+        }, _react.default.createElement(_reactNative.ListView, (0, _extends2.default)({
+          ref: "listView",
+          style: [styles.listview, this.props.listViewStyle],
+          dataSource: this.state.dataSource,
+          renderRow: this._renderRow,
+          automaticallyAdjustContentInsets: false
+        }, this.props.options, {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 63
+          }
+        })));
+      }
+    }, {
+      key: "_renderRow",
+      value: function _renderRow(rowData, sectionID, rowID) {
+        var content = null;
+
+        switch (this.props.columnFormat) {
+          case "single-column-left":
+            content = _react.default.createElement(_reactNative.View, {
+              style: [styles.rowContainer, this.props.rowContainerStyle],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 81
+              }
+            }, this.renderTime(rowData, sectionID, rowID), this.renderEvent(rowData, sectionID, rowID), this.renderCircle(rowData, sectionID, rowID));
+            break;
+
+          case "single-column-right":
+            content = _react.default.createElement(_reactNative.View, {
+              style: [styles.rowContainer, this.props.rowContainerStyle],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 90
+              }
+            }, this.renderEvent(rowData, sectionID, rowID), this.renderTime(rowData, sectionID, rowID), this.renderCircle(rowData, sectionID, rowID));
+            break;
+
+          case "two-column":
+            content = rowID % 2 == 0 ? _react.default.createElement(_reactNative.View, {
+              style: [styles.rowContainer, this.props.rowContainerStyle],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 100
+              }
+            }, this.renderTime(rowData, sectionID, rowID), this.renderEvent(rowData, sectionID, rowID), this.renderCircle(rowData, sectionID, rowID)) : _react.default.createElement(_reactNative.View, {
+              style: [styles.rowContainer, this.props.rowContainerStyle],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 106
+              }
+            }, this.renderEvent(rowData, sectionID, rowID), this.renderTime(rowData, sectionID, rowID), this.renderCircle(rowData, sectionID, rowID));
+            break;
+        }
+
+        return _react.default.createElement(_reactNative.View, {
+          key: rowID,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 114
+          }
+        }, content);
+      }
+    }, {
+      key: "_renderTime",
+      value: function _renderTime(rowData, sectionID, rowID) {
+        if (!this.props.showTime) {
+          return null;
+        }
+
+        var timeWrapper = null;
+
+        switch (this.props.columnFormat) {
+          case "single-column-left":
+            timeWrapper = {
+              alignItems: "flex-end"
+            };
+            break;
+
+          case "single-column-right":
+            timeWrapper = {
+              alignItems: "flex-start"
+            };
+            break;
+
+          case "two-column":
+            timeWrapper = {
+              flex: 1,
+              alignItems: rowID % 2 == 0 ? "flex-end" : "flex-start"
+            };
+            break;
+        }
+
+        return _react.default.createElement(_reactNative.View, {
+          style: timeWrapper,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 141
+          }
+        }, _react.default.createElement(_reactNative.View, {
+          style: [styles.timeContainer, this.props.timeContainerStyle],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 142
+          }
+        }, _react.default.createElement(_reactNative.Text, {
+          style: [styles.time, this.props.timeStyle],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 143
+          }
+        }, rowData.time)));
+      }
+    }, {
+      key: "_renderEvent",
+      value: function _renderEvent(rowData, sectionID, rowID) {
+        var _this2 = this;
+
+        var lineWidth = rowData.lineWidth ? rowData.lineWidth : this.props.lineWidth;
+        var isLast = this.props.renderFullLine ? !this.props.renderFullLine : this.state.data.slice(-1)[0] === rowData;
+        var lineColor = isLast ? "rgba(0,0,0,0)" : rowData.lineColor ? rowData.lineColor : this.props.lineColor;
+        var opStyle = null;
+
+        switch (this.props.columnFormat) {
+          case "single-column-left":
+            opStyle = {
+              borderColor: lineColor,
+              borderLeftWidth: lineWidth,
+              borderRightWidth: 0,
+              marginLeft: 20,
+              paddingLeft: 20
+            };
+            break;
+
+          case "single-column-right":
+            opStyle = {
+              borderColor: lineColor,
+              borderLeftWidth: 0,
+              borderRightWidth: lineWidth,
+              marginRight: 20,
+              paddingRight: 20
+            };
+            break;
+
+          case "two-column":
+            opStyle = rowID % 2 == 0 ? {
+              borderColor: lineColor,
+              borderLeftWidth: lineWidth,
+              borderRightWidth: 0,
+              marginLeft: 20,
+              paddingLeft: 20
+            } : {
+              borderColor: lineColor,
+              borderLeftWidth: 0,
+              borderRightWidth: lineWidth,
+              marginRight: 20,
+              paddingRight: 20
+            };
+            break;
+        }
+
+        return _react.default.createElement(_reactNative.View, {
+          style: [styles.details, opStyle],
+          onLayout: function onLayout(evt) {
+            if (!_this2.state.x && !_this2.state.width) {
+              var _evt$nativeEvent$layo = evt.nativeEvent.layout,
+                  x = _evt$nativeEvent$layo.x,
+                  width = _evt$nativeEvent$layo.width;
+
+              _this2.setState({
+                x: x,
+                width: width
+              });
+            }
+          },
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 203
+          }
+        }, _react.default.createElement(_reactNative.TouchableOpacity, {
+          disabled: this.props.onEventPress == null,
+          style: [this.props.detailContainerStyle],
+          onPress: function onPress() {
+            return _this2.props.onEventPress ? _this2.props.onEventPress(rowData) : null;
+          },
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 212
+          }
+        }, _react.default.createElement(_reactNative.View, {
+          style: styles.detail,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 219
+          }
+        }, this.renderDetail(rowData, sectionID, rowID)), this._renderSeparator()));
+      }
+    }, {
+      key: "_renderDetail",
+      value: function _renderDetail(rowData, sectionID, rowID) {
+        var title = rowData.description ? _react.default.createElement(_reactNative.View, {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 230
+          }
+        }, _react.default.createElement(_reactNative.Text, {
+          style: [styles.title, this.props.titleStyle],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 231
+          }
+        }, rowData.title), _react.default.createElement(_reactNative.Text, {
+          style: [styles.description, this.props.descriptionStyle],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 234
+          }
+        }, rowData.description)) : _react.default.createElement(_reactNative.Text, {
+          style: [styles.title, this.props.titleStyle],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 239
+          }
+        }, rowData.title);
+        return _react.default.createElement(_reactNative.View, {
+          style: styles.container,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 241
+          }
+        }, title);
+      }
+    }, {
+      key: "_renderCircle",
+      value: function _renderCircle(rowData, sectionID, rowID) {
+        var circleSize = rowData.circleSize ? rowData.circleSize : this.props.circleSize ? this.props.circleSize : defaultCircleSize;
+        var circleColor = rowData.circleColor ? rowData.circleColor : this.props.circleColor ? this.props.circleColor : defaultCircleColor;
+        var lineWidth = rowData.lineWidth ? rowData.lineWidth : this.props.lineWidth ? this.props.lineWidth : defaultLineWidth;
+        var circleStyle = null;
+
+        switch (this.props.columnFormat) {
+          case "single-column-left":
+            circleStyle = {
+              width: this.state.x ? circleSize : 0,
+              height: this.state.x ? circleSize : 0,
+              borderRadius: circleSize / 2,
+              backgroundColor: circleColor,
+              left: this.state.x - circleSize / 2 + (lineWidth - 1) / 2
+            };
+            break;
+
+          case "single-column-right":
+            circleStyle = {
+              width: this.state.width ? circleSize : 0,
+              height: this.state.width ? circleSize : 0,
+              borderRadius: circleSize / 2,
+              backgroundColor: circleColor,
+              left: this.state.width - circleSize / 2 - (lineWidth - 1) / 2
+            };
+            break;
+
+          case "two-column":
+            circleStyle = {
+              width: this.state.width ? circleSize : 0,
+              height: this.state.width ? circleSize : 0,
+              borderRadius: circleSize / 2,
+              backgroundColor: circleColor,
+              left: this.state.width - circleSize / 2 - (lineWidth - 1) / 2
+            };
+            break;
+        }
+
+        var innerCircle = null;
+
+        switch (this.props.innerCircle) {
+          case "icon":
+            var iconSource = rowData.icon ? rowData.icon : this.props.icon;
+            var iconStyle = {
+              height: circleSize,
+              width: circleSize
+            };
+            innerCircle = _react.default.createElement(_reactNative.Image, {
+              source: iconSource,
+              style: [iconStyle, this.props.iconStyle],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 296
+              }
+            });
+            break;
+
+          case "dot":
+            var dotStyle = {
+              height: circleSize / 2,
+              width: circleSize / 2,
+              borderRadius: circleSize / 4,
+              backgroundColor: rowData.dotColor ? rowData.dotColor : this.props.dotColor ? this.props.dotColor : defaultDotColor
+            };
+            innerCircle = _react.default.createElement(_reactNative.View, {
+              style: [styles.dot, dotStyle],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 311
+              }
+            });
+            break;
+        }
+
+        return _react.default.createElement(_reactNative.View, {
+          style: [styles.circle, circleStyle, this.props.circleStyle],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 315
+          }
+        }, innerCircle);
+      }
+    }, {
+      key: "_renderSeparator",
+      value: function _renderSeparator() {
+        if (!this.props.separator) {
+          return null;
+        }
+
+        return _react.default.createElement(_reactNative.View, {
+          style: [styles.separator, this.props.separatorStyle],
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 325
+          }
+        });
+      }
+    }]);
+    return Timeline;
+  }(_react.Component));
+
+  var _default2 = Timeline;
+  exports.default = _default2;
+  Timeline.defaultProps = {
+    circleSize: defaultCircleSize,
+    circleColor: defaultCircleColor,
+    lineWidth: defaultLineWidth,
+    lineColor: defaultLineColor,
+    innerCircle: defaultInnerCircle,
+    columnFormat: "single-column-left",
+    separator: false,
+    showTime: true
+  };
+
+  var styles = _reactNative.StyleSheet.create({
+    container: {
+      flex: 1
+    },
+    listview: {
+      flex: 1
+    },
+    sectionHeader: {
+      marginBottom: 15,
+      backgroundColor: "#007AFF",
+      height: 30,
+      justifyContent: "center"
+    },
+    sectionHeaderText: {
+      color: "#FFF",
+      fontSize: 18,
+      alignSelf: "center"
+    },
+    rowContainer: {
+      flexDirection: "row",
+      flex: 1,
+      justifyContent: "center"
+    },
+    timeContainer: {
+      minWidth: 45
+    },
+    time: {
+      textAlign: "right",
+      color: defaultTimeTextColor
+    },
+    circle: {
+      width: 16,
+      height: 16,
+      borderRadius: 10,
+      position: "absolute",
+      left: -8,
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    dot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: defaultDotColor
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: "bold"
+    },
+    details: {
+      borderLeftWidth: defaultLineWidth,
+      flexDirection: "column",
+      flex: 1
+    },
+    detail: {
+      paddingTop: 10,
+      paddingBottom: 10
+    },
+    description: {
+      marginTop: 10
+    },
+    separator: {
+      height: 1,
+      backgroundColor: "#aaa",
+      marginTop: 10,
+      marginBottom: 10
+    }
+  });
+},738,[1,540,104,114,115,122,123,125,129,138,256,2],"node_modules/react-native-timeline-listview/lib/index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
 
