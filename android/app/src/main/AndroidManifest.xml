@@ -29,11 +29,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
-        <!--reference your fb_app_id-->
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/fb_app_id"/>
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/maps_api"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

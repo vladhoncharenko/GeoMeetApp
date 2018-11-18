@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.magus.fblogin.FacebookLoginPackage;
 import io.radar.sdk.Radar;
+import com.airbnb.android.react.maps.MapsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -28,10 +29,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNRadarPackage(),
-            new VectorIconsPackage(),
-            new ReactNativeRestartPackage(),
-          new FacebookLoginPackage()
+          new RNRadarPackage(),
+          new VectorIconsPackage(),
+          new ReactNativeRestartPackage(),
+          new FacebookLoginPackage(),
+          new MapsPackage()
       );
     }
 
