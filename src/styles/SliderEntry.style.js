@@ -42,33 +42,17 @@ export default StyleSheet.create({
         marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
         backgroundColor: 'white',
         borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        borderTopRightRadius: entryBorderRadius,
+        borderBottomLeftRadius: entryBorderRadius,
+        borderBottomRightRadius: entryBorderRadius
     },
     imageContainerEven: {
         backgroundColor: colors.black
     },
-    image: {
-        ...StyleSheet.absoluteFillObject,
-        resizeMode: 'cover',
-        borderRadius: IS_IOS ? entryBorderRadius : 0,
-        borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
-    },
-    // image's border radius is buggy on iOS; let's hack it!
-    radiusMask: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: entryBorderRadius,
-        backgroundColor: 'white'
-    },
-    radiusMaskEven: {
-        backgroundColor: colors.black
-    },
+ 
     textContainer: {
         justifyContent: 'center',
-        paddingTop: 20 - entryBorderRadius,
+        paddingTop: entryBorderRadius,
         paddingBottom: 20,
         paddingHorizontal: 16,
         backgroundColor: 'white',

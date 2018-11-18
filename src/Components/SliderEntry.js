@@ -4,6 +4,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
 import styles from '../styles/SliderEntry.style';
+import Icon from 'react-native-vector-icons/Feather'
 
 export default class SliderEntry extends Component {
 
@@ -13,59 +14,31 @@ export default class SliderEntry extends Component {
         parallax: PropTypes.bool,
         parallaxProps: PropTypes.object
     };
+    constructor(props) {
+        super(props);
 
-    get image () {
-        const { data: { illustration }, parallax, parallaxProps, even } = this.props;
+        this._onStarPress = e => {
+            console.log(e)
+        };
 
-        return parallax ? (
-            <ParallaxImage
-              source={{ uri: illustration }}
-              containerStyle={[styles.imageContainer, even ? styles.imageContainerEven : {}]}
-              style={styles.image}
-              parallaxFactor={0.35}
-              showSpinner={true}
-              spinnerColor={even ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.25)'}
-              {...parallaxProps}
-            />
-        ) : (
-            <Image
-              source={{ uri: illustration }}
-              style={styles.image}
-            />
-        );
+        this._onContactPress = e => {
+            console.log(e)
+        };
     }
-
-    render () {
-        const { data: { title, subtitle }, even } = this.props;
-
-        const uppercaseTitle = title ? (
-            <Text
-              style={[styles.title, even ? styles.titleEven : {}]}
-              numberOfLines={2}
-            >
-                { title.toUpperCase() }
-            </Text>
-        ) : false;
-
+    render() {
+        const { data: { id, name, date, address, description, creatorId }, even } = this.props;
         return (
             <TouchableOpacity
-              activeOpacity={1}
-              style={styles.slideInnerContainer}
-              onPress={() => { alert(`You've clicked '${title}'`); }}
-              >
+                activeOpacity={1}
+                style={styles.slideInnerContainer}>
                 <View style={styles.shadow} />
                 <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
-                    { this.image }
-                    <View style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]} />
-                </View>
-                <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
-                    { uppercaseTitle }
-                    <Text
-                      style={[styles.subtitle, even ? styles.subtitleEven : {}]}
-                      numberOfLines={2}
-                    >
-                        { subtitle }
-                    </Text>
+                    <Text>{name}</Text>
+                    <Text>{date}</Text>
+                    <Text>{address}</Text>
+                    <Text>{description}</Text>
+                    <Icon size={35} color="white" name="star" onPress={() => this._onStarPress(id)} />
+                    <Icon size={35} color="white" name="message-square" onPress={() => this._onContactPress(creatorId)} />
                 </View>
             </TouchableOpacity>
         );

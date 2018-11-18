@@ -27,5 +27,10 @@ export default StyleSheet.create({
     },
     sliderContentContainer: {
         paddingVertical: 10,
+    },
+    createEventBtn: {
+        position: 'absolute',
+        top: 32,
+        left: 24,
     }
 });
