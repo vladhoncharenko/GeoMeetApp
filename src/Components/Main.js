@@ -5,6 +5,8 @@ let Chat = require('./Chat.js');
 let Events = require('./Events');
 let Meetings = require('./Meetings');
 let Settings = require('./Settings');
+import React, { Component } from "react";
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 const Main = TabNavigator({
   Events: { screen: Events },
@@ -23,13 +25,15 @@ const Main = TabNavigator({
         rippleColor: 'white',
         tabs: {
           Events: {
-            barBackgroundColor: '#37474F'
+            barBackgroundColor: '#37474F',
+            icon: <Icon size={24} color="white" name="place" />,
+            label: 'Заходи'
           },
           Chat: {
             barBackgroundColor: '#00796B'
           },
           Meetings: {
-            barBackgroundColor: '#B71C1C'
+            barBackgroundColor: '#B71C1C',
           },
           Settings: {
             barBackgroundColor: '#1B5E20'

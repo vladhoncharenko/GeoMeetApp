@@ -6,6 +6,8 @@ import MapView from "react-native-maps";
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import SliderEntry from './SliderEntry';
 import styles from '../styles/Events.style';
+import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
+let CreateEvent = require('./CreateEvent.js');
 
 const { width, height } = Dimensions.get("window");
 
@@ -15,11 +17,6 @@ const LONGITUDE_DELTA = LATITUD_DELTA * (width / height);
 const NAVIGATION_TIME = 222;
 
 class Events extends Component {
-  static navigationOptions = {
-    tabBarLabel: 'Заходи',
-    tabBarIcon: () => (<Icon size={24} color="white" name="place" />)
-  }
-
   constructor(props) {
     super(props);
 
@@ -124,7 +121,12 @@ class Events extends Component {
   }
 
   createEvent() {
-    console.log(33333)
+    this.props.navigation.dispatch(StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'CreateEvent' })
+      ],
+    }));
   }
 
   render() {
@@ -173,4 +175,23 @@ class Events extends Component {
   }
 }
 
-module.exports = Events;
+module.exports = createStackNavigator(
+  {
+    Events: {
+      screen: Events,
+      navigationOptions: {
+        header: null,
+        tabBarLabel: 'Заходи',
+      }
+    },
+    CreateEvent: {
+      screen: CreateEvent,
+      navigationOptions: {
+        header: null
+      }
+    },
+  },
+  {
+    initialRouteName: 'Events',
+  }
+);
