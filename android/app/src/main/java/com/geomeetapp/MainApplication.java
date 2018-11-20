@@ -3,6 +3,7 @@ package com.geomeetapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNGooglePlacePickerPackage;
 import io.radar.react.RNRadarPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNGooglePlacePickerPackage(),
           new RNRadarPackage(),
           new VectorIconsPackage(),
           new ReactNativeRestartPackage(),

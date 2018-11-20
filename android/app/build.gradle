@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-google-place-picker')
     compile project(':react-native-radar')
     compile project(':react-native-vector-icons')
     compile project(':react-native-restart')
@@ -148,6 +149,7 @@ dependencies {
     implementation 'io.radar:sdk:2.1.+'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation project(':react-native-maps')
+    compile 'com.google.android.gms:play-services-places:11.6.2'
 }
 
 // Run this once to be able to run the application with BUCK
