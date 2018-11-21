@@ -1,7 +1,9 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { View, Text, StyleSheet, Image, RefreshControl } from 'react-native';
-import Timeline from 'react-native-timeline-listview'
+import Timeline from 'react-native-timeline-listview';
+import { BASE_URL } from '../consts';
+const axios = require('axios');
 
 class Meetings extends React.Component {
   static navigationOptions = {
@@ -22,89 +24,26 @@ class Meetings extends React.Component {
 
     this.onEventPress = this.onEventPress.bind(this);
     this.renderDetail = this.renderDetail.bind(this);
-    this.onRefresh = this.onRefresh.bind(this);
-    this.setData();
   }
 
-  onRefresh() {
+  async onRefresh() {
     this.setState({ isRefreshing: true });
-    setTimeout(() => {
-      var results = [{
-        userId: '5',
-        time: '16:30 12.10',
-        title: 'Анна Тутова',
-        description: 'Look out for the Best Gym & Fitness Centers.\nAround me :)',
-        imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240422/20d84f6c-0fe4-11e7-8f1d-9dbc594d0cfa.jpg'
-      }];
-      this.setState({
-        data: results,
-        isRefreshing: false,
-        noResults: results.length > 0 ? false : true
-      });
-    }, 2000);
-  }
+    await this.componentDidMount();
+    this.setState({ isRefreshing: false });
+  };
 
-  setData() {
-    var results = [
-      {
-        userId: '1',
-        time: '09:00 13.10',
-        title: 'Vlad Honcharenko',
-        description: 'The Beginner Archery and Beginner.\nCrossbow course does not require you to bring any equipment, since everything you need will be provided for the course. ',
-        imageUrl: 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=594213414366528&height=50&width=50&ext=1544810051&hash=AeS4SzbYOQcHnYSs'
-      },
-      {
-        userId: '2',
-        time: '10:45 13.10',
-        title: 'Anton Badminton',
-        description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.',
-        imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240405/0ba41234-0fe4-11e7-919b-c3f88ced349c.jpg'
-      },
-      {
-        userId: '3',
-        time: '10:45 13.10',
-        title: 'Дмитро Токар',
-        description: 'Badminton is a racquet sport.\nPlayed using racquets to hit a shuttlecock across a net.',
-        imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240405/0ba41234-0fe4-11e7-919b-c3f88ced349c.jpg'
-      },
-      {
-        userId: '4',
-        time: '14:00 12.10',
-        title: 'Антон Петров',
-        description: 'Team sport.\nPlayed between two teams of eleven players with a spherical ball. ',
-        imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240419/1f553dee-0fe4-11e7-8638-6025682232b1.jpg'
-      },
-      {
-        userId: '5',
-        time: '16:30 12.10',
-        title: 'Петро Антонов',
-        description: 'Look out for the Best Gym & Fitness.\nCenters around me :)',
-        imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240422/20d84f6c-0fe4-11e7-8f1d-9dbc594d0cfa.jpg'
-      },
-      {
-        userId: '4',
-        time: '14:00 12.10',
-        title: 'Watch Soccer',
-        description: 'Team sport.\nPlayed between two teams of eleven players with a spherical ball.',
-        imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240419/1f553dee-0fe4-11e7-8638-6025682232b1.jpg'
-      },
-      {
-        userId: '5',
-        time: '16:30 12.10',
-        title: 'Анна Тутова',
-        description: 'Look out for the Best Gym & Fitness Centers.\nAround me :)',
-        imageUrl: 'https://cloud.githubusercontent.com/assets/21040043/24240422/20d84f6c-0fe4-11e7-8f1d-9dbc594d0cfa.jpg'
-      }
-    ];
-
-    setTimeout(() => {
+  async componentDidMount() {
+    try {
+      const result = await axios.get(BASE_URL + "/users/meetings");
       this.setState({
-        data: results,
+        data: result.data,
         isLoading: false,
-        noResults: results.length > 0 ? false : true
+        noResults: result.data.length > 0 ? false : true
       });
-    }, 5000);
-  }
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
   onEventPress(data) {
     this.setState({ selected: data });
@@ -147,7 +86,7 @@ class Meetings extends React.Component {
           refreshControl: (
             <RefreshControl
               refreshing={this.state.isRefreshing}
-              onRefresh={this.onRefresh}
+              onRefresh={async (e) => await this.onRefresh(e)}
             />
           ),
         }}
