@@ -45,7 +45,7 @@ export default class App extends Component {
           ref={(fbLogin) => { this.fbLogin = fbLogin }}
           loginBehavior={FBLoginManager.LoginBehaviors.Native}
           permissions={["email"]}
-          onLogin={function (e) { OnFBLogin(e) }}
+          onLogin={async (e) => await OnFBLogin(e)}
           onLoginFound={function (e) { console.log(e) }}
           onLoginNotFound={function (e) { console.log(e) }}
           onLogout={function (e) { console.log(e) }}

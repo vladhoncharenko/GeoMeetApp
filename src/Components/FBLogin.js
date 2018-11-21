@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
+import { View, Button, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import RNRestart from 'react-native-restart';
 let Main = require('./Main.js');
 
 class FBLogin extends Component {
@@ -32,12 +31,7 @@ class FBLogin extends Component {
       if (this.props.isTutorialCompleted) {
         return (<Main />);
       } else {
-        try {
-          return null;
-        } catch (error) {
-        } finally {
-          RNRestart.Restart();
-        }
+        return <Text>Завантаження...</Text>
       }
     }
   }

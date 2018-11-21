@@ -1,0 +1,1 @@
+export const BASE_URL = 'http://appevents.6ymubfrsmm.us-west-2.elasticbeanstalk.com/api/';
