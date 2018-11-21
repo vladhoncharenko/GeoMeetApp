@@ -1,9 +1,12 @@
 
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableHighlight, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, Button, ScrollView, AsyncStorage } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import moment from 'moment';
 import RNGooglePlacePicker from 'react-native-google-place-picker';
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import { BASE_URL } from '../consts';
+const axios = require('axios');
 
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
@@ -14,7 +17,7 @@ var Event = t.struct({
     startTime: t.Date,
     endDate: t.Date,
     endTime: t.Date,
-    radius: t.refinement(t.Number, function (s) { return s > 50 && s < 151; }),
+    radius: t.refinement(t.Number, function (s) { return s > 49 && s < 151; }),
     description: t.String
 });
 
@@ -73,12 +76,27 @@ class CreateEvent extends Component {
         }
     };
 
-    createLocation() {
-        const formValues = this.refs.form.getValue();
+    async createLocation() {
+        try {
+            let values = {};
+            let form = this.refs.form.getValue();
+            let userId = await AsyncStorage.getItem('userId');
+            Object.assign(values, form);
+            values.creatorId = userId;
+            values.location = this.state.location;
+            await axios.post(BASE_URL + "/geofences", values);
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.back(true);
+    };
+
+    back(shouldUpdate) {
         this.props.navigation.dispatch(StackActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({ routeName: 'Events', params: { shouldUpdate: true } })
+                NavigationActions.navigate({ routeName: 'Events', params: { shouldUpdate: shouldUpdate } })
             ],
         }))
     };
@@ -131,10 +149,16 @@ class CreateEvent extends Component {
                             {!this.state.location ? ("") : (this.state.location.address)}
                         </Text>
                     </View>
-                    <Button title="Створити" style={styles.button} onPress={() => this.createLocation()} disabled={this.state.buttonState} >
+                    <Button title="Створити" style={styles.button} onPress={async () => await this.createLocation()} disabled={this.state.buttonState} >
                     </Button>
 
                 </ScrollView>
+                <Icon
+                    name='chat'
+                    size={35}
+                    onPress={() => this.back(false)}
+                    style={styles.createEventBtn}
+                    color='white' />
             </View>
         );
     }
@@ -166,6 +190,11 @@ var styles = StyleSheet.create({
         marginBottom: 10,
         alignSelf: 'stretch',
         justifyContent: 'center'
+    },
+    createEventBtn: {
+        position: 'absolute',
+        top: 32,
+        left: 24,
     }
 });
 
