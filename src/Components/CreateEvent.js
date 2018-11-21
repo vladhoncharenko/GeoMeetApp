@@ -74,6 +74,7 @@ class CreateEvent extends Component {
     };
 
     createLocation() {
+        const formValues = this.refs.form.getValue();
         this.props.navigation.dispatch(StackActions.reset({
             index: 0,
             actions: [
