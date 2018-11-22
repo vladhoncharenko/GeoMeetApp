@@ -94,9 +94,6 @@ class Events extends Component {
           longitudeDelta: LONGITUDE_DELTA
         };
       }
-
-      
-
       this.setState(this.state)
     });
   };
@@ -112,7 +109,6 @@ class Events extends Component {
     return (
       <View style={styles.container}>
         {!this.state.isLoading ?
-
           <View style={styles.container}>
             {this.state.noResults ? <Text>Додайте перший захід: <Icon
               name='chat'
@@ -159,7 +155,6 @@ class Events extends Component {
                   style={styles.createEventBtn}
                   color='white' />
               </View>}
-
           </View>
           : <Text>Завантаження...</Text>}
       </View>

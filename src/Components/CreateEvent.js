@@ -10,6 +10,13 @@ const axios = require('axios');
 
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
+const Radius = t.enums({
+    50: "50",
+    75: "75",
+    100: "100",
+    125: "125",
+    150: "150"
+  });
 
 var Event = t.struct({
     name: t.String,
@@ -17,7 +24,7 @@ var Event = t.struct({
     startTime: t.Date,
     endDate: t.Date,
     endTime: t.Date,
-    radius: t.refinement(t.Number, function (s) { return s > 49 && s < 151; }),
+    radius: Radius,
     description: t.String
 });
 
