@@ -21,7 +21,8 @@ class Events extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      noResults: true
     };
 
     this._onMarkerPress = e => {
@@ -82,15 +83,19 @@ class Events extends Component {
       this.state = {
         slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
         markers: events.data,
-        isLoading: false
+        isLoading: false,
+        noResults: events.data.length ===0
       };
+      if(!this.state.noResults){
+        this.defaultRegion = {
+          latitude: parseFloat(this.state.markers[0].coordinate.latitude),
+          longitude: parseFloat(this.state.markers[0].coordinate.longitude),
+          latitudeDelta: LATITUD_DELTA,
+          longitudeDelta: LONGITUDE_DELTA
+        };
+      }
 
-      this.defaultRegion = {
-        latitude: parseFloat(this.state.markers[0].coordinate.latitude),
-        longitude: parseFloat(this.state.markers[0].coordinate.longitude),
-        latitudeDelta: LATITUD_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-      };
+      
 
       this.setState(this.state)
     });
@@ -107,44 +112,54 @@ class Events extends Component {
     return (
       <View style={styles.container}>
         {!this.state.isLoading ?
+
           <View style={styles.container}>
-            <MapView
-              ref={map => this.map = map}
-              initialRegion={this.defaultRegion}
-              style={styles.container}>
-              {this.state.markers.map((marker, index) => {
-                return (
-                  <View key={index + marker.id}>
-                    <MapView.Circle key={index} center={this.parseCoords(marker.coordinate)} radius={parseFloat(marker.radius)} strokeColor={"rgba(233,3,45,0.5)"} fillColor={"rgba(134,33,44,0.4)"} />
-                    <MapView.Marker coordinate={this.parseCoords(marker.coordinate)} key={marker.id} onPress={this._onMarkerPress}></MapView.Marker>
-                  </View>
-                );
-              })}
-            </MapView>
-            <View style={styles.exampleContainer}>
-              <Carousel
-                ref={c => this._slider1Ref = c}
-                data={this.state.markers}
-                renderItem={this._renderItemWithParallax}
-                sliderWidth={sliderWidth}
-                itemWidth={itemWidth}
-                firstItem={SLIDER_1_FIRST_ITEM}
-                inactiveSlideScale={0.94}
-                inactiveSlideOpacity={0.7}
-                containerCustomStyle={styles.slider}
-                contentContainerCustomStyle={styles.sliderContentContainer}
-                loop={false}
-                loopClonesPerSide={2}
-                autoplay={false}
-                onSnapToItem={(index) => this.onSnapToItem(index)}
-              />
-            </View>
-            <Icon
+            {this.state.noResults ? <Text>Додайте перший захід: <Icon
               name='chat'
               size={35}
               onPress={() => this.createEvent()}
               style={styles.createEventBtn}
               color='white' />
+            </Text> : <View style={styles.container}>
+                <MapView
+                  ref={map => this.map = map}
+                  initialRegion={this.defaultRegion}
+                  style={styles.container}>
+                  {this.state.markers.map((marker, index) => {
+                    return (
+                      <View key={index + marker.id}>
+                        <MapView.Circle key={index} center={this.parseCoords(marker.coordinate)} radius={parseFloat(marker.radius)} strokeColor={"rgba(233,3,45,0.5)"} fillColor={"rgba(134,33,44,0.4)"} />
+                        <MapView.Marker coordinate={this.parseCoords(marker.coordinate)} key={marker.id} onPress={this._onMarkerPress}></MapView.Marker>
+                      </View>
+                    );
+                  })}
+                </MapView>
+                <View style={styles.exampleContainer}>
+                  <Carousel
+                    ref={c => this._slider1Ref = c}
+                    data={this.state.markers}
+                    renderItem={this._renderItemWithParallax}
+                    sliderWidth={sliderWidth}
+                    itemWidth={itemWidth}
+                    firstItem={SLIDER_1_FIRST_ITEM}
+                    inactiveSlideScale={0.94}
+                    inactiveSlideOpacity={0.7}
+                    containerCustomStyle={styles.slider}
+                    contentContainerCustomStyle={styles.sliderContentContainer}
+                    loop={false}
+                    loopClonesPerSide={2}
+                    autoplay={false}
+                    onSnapToItem={(index) => this.onSnapToItem(index)}
+                  />
+                </View>
+                <Icon
+                  name='chat'
+                  size={35}
+                  onPress={() => this.createEvent()}
+                  style={styles.createEventBtn}
+                  color='white' />
+              </View>}
+
           </View>
           : <Text>Завантаження...</Text>}
       </View>
