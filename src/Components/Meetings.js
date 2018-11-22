@@ -33,6 +33,14 @@ class Meetings extends React.Component {
   };
 
   async componentDidMount() {
+    this._sub = this.props.navigation.addListener('didFocus', async () =>
+      await this.updateData()
+    );
+    await this.updateData();
+
+  };
+
+  async updateData() {
     try {
       const result = await axios.get(BASE_URL + "/users/meetings");
       this.setState({

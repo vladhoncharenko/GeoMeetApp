@@ -69,7 +69,14 @@ class Events extends Component {
     }));
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    this._sub = this.props.navigation.addListener('didFocus', async () =>
+      await this.updateData()
+    );
+    await this.updateData();
+  };
+
+  async updateData() {
     axios.get(BASE_URL + "/geofences").then((events) => {
 
       this.state = {

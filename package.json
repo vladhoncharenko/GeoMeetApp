@@ -13,6 +13,7 @@
     "react": "16.6.0-alpha.8af6728",
     "react-native": "0.57.4",
     "react-native-app-intro-slider": "^1.0.1",
+    "react-native-elements": "^1.0.0-beta7",
     "react-native-facebook-login": "^1.6.1",
     "react-native-google-place-picker": "^1.2.1",
     "react-native-maps": "^0.22.1",
