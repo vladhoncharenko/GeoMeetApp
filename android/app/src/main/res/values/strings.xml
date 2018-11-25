@@ -4,4 +4,5 @@
     <string name="fb_login_protocol_scheme"></string>
     <string name="radarPublishableKey"></string>
     <string name="facebook_client_token"></string>
+    <string name="maps_api"></string>
 </resources>
