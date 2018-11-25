@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableHighlight, Button, ScrollView, AsyncSt
 import { StackActions, NavigationActions } from 'react-navigation';
 import moment from 'moment';
 import RNGooglePlacePicker from 'react-native-google-place-picker';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { BASE_URL } from '../consts';
 const axios = require('axios');
 
@@ -16,7 +16,7 @@ const Radius = t.enums({
     100: "100",
     125: "125",
     150: "150"
-  });
+});
 
 var Event = t.struct({
     name: t.String,
@@ -32,7 +32,7 @@ var options = {
     fields: {
         name: {
             label: 'Назва',
-            maxLength: 20
+            maxLength: 40
         },
         radius: {
             label: 'Радіус',
@@ -40,7 +40,7 @@ var options = {
         },
         description: {
             label: 'Опис',
-            maxLength: 40,
+            maxLength: 60,
         },
         startDate: {
             mode: 'date',
@@ -91,7 +91,11 @@ class CreateEvent extends Component {
             Object.assign(values, form);
             values.creatorId = userId;
             values.location = this.state.location;
-            await axios.post(BASE_URL + "/geofences", values);
+            let auth_token = await AsyncStorage.getItem('auth_token');
+            var config = {
+                headers: { 'x-amz-security-token': auth_token }
+            };
+            await axios.post(BASE_URL + "/geofences", values, config);
         } catch (error) {
             console.log(error);
         }
@@ -136,15 +140,16 @@ class CreateEvent extends Component {
 
     render() {
         return (
-            <View>
-                <ScrollView>
-                    <Text>Створити новий захід:</Text>
+            <View style={styles.container}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ marginLeft: 55, marginRight: 55 }}>
+                    <Text style={{ marginTop: 27, marginBottom: 20, fontSize: 25, color: '#356859' }}>Створити новий захід:</Text>
                     <Form
                         ref="form"
                         type={Event}
                         options={options}
                         value={this.state.value}
                         onChange={this.onFormChange.bind(this)}
+
                     />
 
                     <TouchableHighlight style={styles.button} onPress={this.getLocation.bind(this)} underlayColor='#99d9f4'>
@@ -156,16 +161,17 @@ class CreateEvent extends Component {
                             {!this.state.location ? ("") : (this.state.location.address)}
                         </Text>
                     </View>
-                    <Button title="Створити" style={styles.button} onPress={async () => await this.createLocation()} disabled={this.state.buttonState} >
-                    </Button>
-
+                    <View style={{ marginBottom: 30 }}>
+                        <Button title="Створити" onPress={async () => await this.createLocation()} disabled={this.state.buttonState} >
+                        </Button>
+                    </View>
                 </ScrollView>
                 <Icon
-                    name='chat'
+                    name='chevron-left'
                     size={35}
                     onPress={() => this.back(false)}
                     style={styles.createEventBtn}
-                    color='white' />
+                    color='#356859' />
             </View>
         );
     }
@@ -174,24 +180,21 @@ class CreateEvent extends Component {
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#FFFBE6'
     },
     location: {
-        backgroundColor: 'white',
+        backgroundColor: '#FFFBE6',
         margin: 25
     },
     buttonText: {
         fontSize: 18,
-        color: 'white',
+        color: '#FD5523',
         alignSelf: 'center'
     },
     button: {
         height: 36,
-        backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
+        backgroundColor: '#B9E4C9',
+        borderColor: '#B9E4C9',
         borderWidth: 1,
         borderRadius: 8,
         marginBottom: 10,

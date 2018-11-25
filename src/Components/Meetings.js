@@ -1,6 +1,6 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { View, Text, StyleSheet, Image, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, Image, RefreshControl, AsyncStorage } from 'react-native';
 import Timeline from 'react-native-timeline-listview';
 import { BASE_URL } from '../consts';
 const axios = require('axios');
@@ -42,7 +42,13 @@ class Meetings extends React.Component {
 
   async updateData() {
     try {
-      const result = await axios.get(BASE_URL + "/users/meetings");
+      let userId = await AsyncStorage.getItem('userId');
+      let auth_token = await AsyncStorage.getItem('auth_token');
+      var config = {
+        headers: {'x-amz-security-token':  auth_token}
+      };
+    
+      const result = await axios.get(BASE_URL + "users/"+userId +"/meetings", config);
       this.setState({
         data: result.data,
         isLoading: false,
@@ -84,10 +90,10 @@ class Meetings extends React.Component {
         style={styles.list}
         data={this.state.data}
         circleSize={20}
-        circleColor='rgba(250,88,66,12)'
-        lineColor='rgb(45,156,219)'
+        circleColor='#B9E4C9'
+        lineColor='#37966F'
         timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-        timeStyle={{ textAlign: 'center', backgroundColor: '#ff9797', color: 'white', padding: 5, marginTop: 10, borderRadius: 13 }}
+        timeStyle={{ textAlign: 'center', backgroundColor: '#B9E4C9', color: '#FD5523', padding: 5, marginTop: 10, borderRadius: 13 }}
         descriptionStyle={{ color: 'gray' }}
         options={{
           style: { paddingTop: 5 },
@@ -113,15 +119,16 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 20,
     paddingRight: 20,
-    marginTop: 5,
-    backgroundColor: 'white'
+    paddingTop: 5,
+    backgroundColor: '#FFFBE6'
   },
   list: {
     flex: 1
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color:"#FD5523"
   },
   promt: {
     textAlign: 'center',
@@ -140,7 +147,7 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     marginLeft: 10,
-    color: 'gray'
+    color:"#356859"
   }
 });
 

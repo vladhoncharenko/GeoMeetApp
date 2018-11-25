@@ -40,18 +40,24 @@ export default class App extends Component {
         }
       }
       else {
-        return (<FBLogin
-          buttonView={<FBLoginComponent isTutorialCompleted={this.state.isTutorialCompleted} />}
-          ref={(fbLogin) => { this.fbLogin = fbLogin }}
-          loginBehavior={FBLoginManager.LoginBehaviors.Native}
-          permissions={["email"]}
-          onLogin={async (e) => await OnFBLogin(e)}
-          onLoginFound={function (e) { console.log(e) }}
-          onLoginNotFound={function (e) { console.log(e) }}
-          onLogout={function (e) { console.log(e) }}
-          onCancel={function (e) { console.log(e) }}
-          onPermissionsMissing={function (e) { console.log(e) }}
-        />);
+        return (
+          <View style={[{ flex: 1, backgroundColor: "#FFFBE6", alignItems: 'center' }]}>
+            <Text style={[{ marginTop: 200, fontSize: 22 }]}>Вітаємо у Geo Meet App!</Text>
+            <Text style={[{ marginTop: 20, marginBottom: 100, fontSize: 22 }]}>Вітаємо у Geo Meet App!</Text>
+            <FBLogin style={{ position: 'absolute' }}
+              buttonView={<FBLoginComponent isTutorialCompleted={this.state.isTutorialCompleted} />}
+              ref={(fbLogin) => { this.fbLogin = fbLogin }}
+              loginBehavior={FBLoginManager.LoginBehaviors.Native}
+              permissions={["email"]}
+              onLogin={async (e) => await OnFBLogin(e)}
+              onLoginFound={function (e) { console.log(e) }}
+              onLoginNotFound={function (e) { console.log(e) }}
+              onLogout={function (e) { console.log(e) }}
+              onCancel={function (e) { console.log(e) }}
+              onPermissionsMissing={function (e) { console.log(e) }}
+            />
+          </View>
+        );
       }
     } else {
       return (<View><Text>Завантаження...</Text></View>);

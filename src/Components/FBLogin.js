@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Text,StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { Button } from 'react-native-elements'
 let Main = require('./Main.js');
 
 class FBLogin extends Component {
@@ -17,15 +18,20 @@ class FBLogin extends Component {
 
   render() {
     if (!this.context.isLoggedIn) {
-      return <View style={[]}>
-        <Button onPress={() => {
+      return <View style={styles.view}>
+      
+      <Button onPress={() => {
           this.context.login()
         }}
-          color={"#000000"}
-          backgroundColor={"#ffffff"}
-          size={20} borderRadius={100}
+          color={"#vgt500"}
+          rounded={true}
+          rightIcon
+          buttonStyle={{elevation: 0}}
+          backgroundColor={"#ffffaaf"}
           title="Увійти через FaceBook">
         </Button>
+    
+       
       </View>
     } else {
       if (this.props.isTutorialCompleted) {
@@ -37,4 +43,15 @@ class FBLogin extends Component {
   }
 }
 
+const styles = StyleSheet.create({
+  loginButton:{
+    marginTop:500
+  },
+  view:{
+
+  
+    backgroundColor:"#FFFBE6"
+  }
+
+});
 module.exports = FBLogin;

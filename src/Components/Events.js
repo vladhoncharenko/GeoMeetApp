@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import Carousel from 'react-native-snap-carousel';
-import { View, Dimensions, Text } from "react-native";
+import { View, Dimensions, Text, AsyncStorage } from "react-native";
 import MapView from "react-native-maps";
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import SliderEntry from './SliderEntry';
@@ -78,7 +78,11 @@ class Events extends Component {
   };
 
   async updateData() {
-    axios.get(BASE_URL + "/geofences").then((events) => {
+    let auth_token = await AsyncStorage.getItem('auth_token');
+      var config = {
+        headers: {'x-amz-security-token':  auth_token}
+      };
+    axios.get(BASE_URL + "/geofences", config).then((events) => {
 
       this.state = {
         slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
@@ -111,7 +115,7 @@ class Events extends Component {
         {!this.state.isLoading ?
           <View style={styles.container}>
             {this.state.noResults ? <Text>Додайте перший захід: <Icon
-              name='chat'
+              name='plus-circle'
               size={35}
               onPress={() => this.createEvent()}
               style={styles.createEventBtn}
@@ -124,8 +128,8 @@ class Events extends Component {
                   {this.state.markers.map((marker, index) => {
                     return (
                       <View key={index + marker.id}>
-                        <MapView.Circle key={index} center={this.parseCoords(marker.coordinate)} radius={parseFloat(marker.radius)} strokeColor={"rgba(233,3,45,0.5)"} fillColor={"rgba(134,33,44,0.4)"} />
-                        <MapView.Marker coordinate={this.parseCoords(marker.coordinate)} key={marker.id} onPress={this._onMarkerPress}></MapView.Marker>
+                        <MapView.Circle key={index} center={this.parseCoords(marker.coordinate)} radius={parseFloat(marker.radius)} strokeColor={"rgba(253, 85, 35, 0.45)"} fillColor={"rgba(255, 251, 230, 0.5)"} />
+                        <MapView.Marker coordinate={this.parseCoords(marker.coordinate)} key={marker.id} onPress={this._onMarkerPress} pinColor='#FD5523'></MapView.Marker>
                       </View>
                     );
                   })}
@@ -149,11 +153,11 @@ class Events extends Component {
                   />
                 </View>
                 <Icon
-                  name='chat'
+                  name='plus-circle'
                   size={35}
                   onPress={() => this.createEvent()}
                   style={styles.createEventBtn}
-                  color='white' />
+                  color='#356859' />
               </View>}
           </View>
           : <Text>Завантаження...</Text>}
