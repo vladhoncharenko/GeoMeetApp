@@ -35,6 +35,8 @@ const Main = TabNavigator({
             barBackgroundColor: '#00796B'
           },
           Meetings: {
+            label: 'Знайомства',
+            icon: <Icon size={24} color="white" name="people" />,
             barBackgroundColor: '#B71C1C',
           },
           Settings: {

@@ -1,16 +1,13 @@
 import React from 'react'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import { View, Text, StyleSheet, Image, RefreshControl, AsyncStorage } from 'react-native';
 import Timeline from 'react-native-timeline-listview';
 import { BASE_URL } from '../consts';
 const axios = require('axios');
+let PrivateChat = require('./PrivateChat');
+import getCurrentUser from "../chatUtils";
+import { createStackNavigator, StackActions, NavigationActions, HeaderBackButton } from 'react-navigation';
 
 class Meetings extends React.Component {
-  static navigationOptions = {
-    tabBarLabel: 'Знайомства',
-    tabBarIcon: () => (<Icon size={24} color="white" name="people" />)
-  }
-
   constructor() {
     super();
     this.state = {
@@ -45,10 +42,10 @@ class Meetings extends React.Component {
       let userId = await AsyncStorage.getItem('userId');
       let auth_token = await AsyncStorage.getItem('auth_token');
       var config = {
-        headers: {'x-amz-security-token':  auth_token}
+        headers: { 'x-amz-security-token': auth_token }
       };
-    
-      const result = await axios.get(BASE_URL + "users/"+userId +"/meetings", config);
+
+      const result = await axios.get(BASE_URL + "users/" + userId + "/meetings", config);
       this.setState({
         data: result.data,
         isLoading: false,
@@ -59,8 +56,28 @@ class Meetings extends React.Component {
     }
   };
 
-  onEventPress(data) {
-    this.setState({ selected: data });
+  async onEventPress(data) {
+
+    let currentUser = await getCurrentUser();
+    let roomName = data.title;
+    let createdRoom = currentUser.rooms.filter((room) => room.name === roomName);
+    let roomId = "";
+    if (createdRoom.length === 0) {
+      let room = await currentUser.createRoom({
+        name: roomName,
+        private: true,
+        addUserIds: [data.userId]
+      });
+      roomId = room.id;
+    } else {
+      roomId = createdRoom[0].id;
+    }
+    this.props.navigation.dispatch(StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'PrivateChat', params: { roomId: roomId, currentUser: currentUser, userId: currentUser.id, roomName: roomName } })
+      ],
+    }));
   }
 
   renderDetail(rowData, sectionID, rowID) {
@@ -105,7 +122,7 @@ class Meetings extends React.Component {
           ),
         }}
         innerCircle={'icon'}
-        onEventPress={this.onEventPress}
+        onEventPress={async (e) => await this.onEventPress(e)}
         renderDetail={this.renderDetail}
         innerCircle={'dot'}
         separator={true}
@@ -128,7 +145,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    color:"#FD5523"
+    color: "#FD5523"
   },
   promt: {
     textAlign: 'center',
@@ -147,8 +164,33 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     marginLeft: 10,
-    color:"#356859"
+    color: "#356859"
   }
 });
 
-module.exports = Meetings;
+module.exports = createStackNavigator(
+  {
+    Meetings: {
+      screen: Meetings,
+      navigationOptions: {
+        header: null,
+        tabBarLabel: 'Знайомства',
+      }
+    },
+    PrivateChat: {
+      screen: PrivateChat,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.params.title,
+        headerLeft: (<HeaderBackButton onPress={() => navigation.dispatch(StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'Meetings' })
+          ],
+        }))} />)
+      }),
+    },
+  },
+  {
+    initialRouteName: 'Meetings',
+  }
+);

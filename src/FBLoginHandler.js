@@ -13,7 +13,7 @@ export async function OnFBLogin(event) {
             token = result.headers.auth_token;
         }
         await AsyncStorage.setItem('auth_token', token);
-        await AsyncStorage.setItem('userId', result.data[0]._id);
+        await AsyncStorage.setItem('userId', result.data._id);
     } catch (error) {
         console.log(error)
     }

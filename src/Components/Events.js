@@ -6,8 +6,9 @@ import MapView from "react-native-maps";
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import SliderEntry from './SliderEntry';
 import styles from '../styles/Events.style';
-import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
+import { createStackNavigator, StackActions, NavigationActions,HeaderBackButton } from 'react-navigation';
 import { BASE_URL } from '../consts';
+let PrivateChat = require('./PrivateChat');
 
 const axios = require('axios');
 let CreateEvent = require('./CreateEvent.js');
@@ -41,6 +42,7 @@ class Events extends Component {
         <SliderEntry
           data={item}
           even={(index + 1) % 2 === 0}
+          navigation={this.props.navigation}
         />
       );
     };
@@ -79,7 +81,7 @@ class Events extends Component {
 
   async updateData() {
     let auth_token = await AsyncStorage.getItem('auth_token');
-      var config = {
+      let config = {
         headers: {'x-amz-security-token':  auth_token}
       };
     axios.get(BASE_URL + "/geofences", config).then((events) => {
@@ -108,7 +110,8 @@ class Events extends Component {
       latitude: parseFloat(coords.latitude)
     };
   };
-
+ 
+  
   render() {
     return (
       <View style={styles.container}>
@@ -181,6 +184,18 @@ module.exports = createStackNavigator(
         header: null
       }
     },
+    PrivateChat: {
+      screen: PrivateChat,
+      navigationOptions: ({ navigation }) => ({
+          title: navigation.state.params.title,
+          headerLeft: (<HeaderBackButton onPress={() => navigation.dispatch(StackActions.reset({
+              index: 0,
+              actions: [
+                  NavigationActions.navigate({ routeName: 'Events' })
+              ],
+          }))} />)
+      }),
+  },
   },
   {
     initialRouteName: 'Events',

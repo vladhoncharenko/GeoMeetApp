@@ -16,8 +16,6 @@ class PrivateChat extends React.Component {
         };
     }
     async componentWillUnmount() {
-        console.log("unmount")
-        let d = this.state.messages;
         this.currentUser.setReadCursor({
             roomId: this.roomId,
             position: this.state.messages[0]._id

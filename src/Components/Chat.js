@@ -4,10 +4,8 @@ import Radar from 'react-native-radar';
 import { createStackNavigator, StackActions, NavigationActions, HeaderBackButton } from 'react-navigation';
 let PrivateChat = require('./PrivateChat');
 import { ListItem } from 'react-native-elements';
-import Chatkit from "@pusher/chatkit-client/react-native";
+import getCurrentUser from "../chatUtils";
 
-const CHATKIT_TOKEN_PROVIDER_ENDPOINT = "";
-const CHATKIT_INSTANCE_LOCATOR = "";
 
 class Chat extends React.Component {
 
@@ -21,16 +19,7 @@ class Chat extends React.Component {
 
     async componentDidMount() {
         let userId = await AsyncStorage.getItem('userId');
-        userId = "test"
-        const tokenProvider = new Chatkit.TokenProvider({
-            url: CHATKIT_TOKEN_PROVIDER_ENDPOINT
-        });
-
-        this.chatManager = new Chatkit.ChatManager({
-            instanceLocator: CHATKIT_INSTANCE_LOCATOR,
-            userId: userId,
-            tokenProvider: tokenProvider
-        });
+        this.currentUser = await getCurrentUser();
 
         this._sub = this.props.navigation.addListener('didFocus', async () =>
             await this.updateData()
@@ -54,36 +43,32 @@ class Chat extends React.Component {
     };
 
     async updateData() {
-    let currentUser = await this.chatManager.connect();
-    this.currentUser= currentUser;
-        
-       
-            for (let index = 0; index < currentUser.rooms.length; index++) {
-                currentUser.rooms[index];
+        for (let index = 0; index < this.currentUser.rooms.length; index++) {
+            this.currentUser.rooms[index];
 
-                let cursor = currentUser.readCursor({
-                    roomId: currentUser.rooms[index].id
-                })
-                
-                if (cursor) {
-                    let messages = await currentUser.fetchMessages({
-                            roomId: currentUser.rooms[index].id,
-                            limit: 1,
-                            direction: 'older',
-                        });
-                        if (messages[0].id > cursor.position) {
-                            currentUser.rooms[index].unreadMsgs = true;
-                                    
-                                } else {
-                                    currentUser.rooms[index].unreadMsgs =false;
-                                    
-                                }
-                   
+            let cursor = this.currentUser.readCursor({
+                roomId: this.currentUser.rooms[index].id
+            })
+
+            if (cursor) {
+                let messages = await this.currentUser.fetchMessages({
+                    roomId: this.currentUser.rooms[index].id,
+                    limit: 1,
+                    direction: 'older',
+                });
+                if (messages[0].id > cursor.position) {
+                    this.currentUser.rooms[index].unreadMsgs = true;
+
+                } else {
+                    this.currentUser.rooms[index].unreadMsgs = false;
+
                 }
+
             }
-            
-            this.setState({ rooms: currentUser.rooms, isLoading: false });
-        
+        }
+
+        this.setState({ rooms: this.currentUser.rooms, isLoading: false });
+
     };
 
     onRoomPress(roomId, roomName) {
@@ -101,18 +86,21 @@ class Chat extends React.Component {
             <View style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false} style={{ marginLeft: 30, marginRight: 30 }}>
                     {!this.state.isLoading &&
-                        <View >
-                            {
-                                this.state.rooms.map((item, index) => (
-                                    <ListItem
-                                        title={<Text>{item.name}</Text>}
-                                        key={item.id}
-                                        containerStyle={{ marginBottom: 5, backgroundColor: '#B9E4C9' }}
-                                        onPress={() => this.onRoomPress(item.id, item.name)}
-                                        badge={item.unreadMsgs?{ value: "", textStyle: { color: 'orange' }, containerStyle: {color: 'red', marginTop: -20 } }:null}
-                                    />
-                                ))
-                            }
+                        <View>
+                            {this.state.rooms.length !== 0 ?
+                                <View >
+                                    {
+                                        this.state.rooms.map((item, index) => (
+                                            <ListItem
+                                                title={<Text>{item.name}</Text>}
+                                                key={item.id}
+                                                containerStyle={{ marginBottom: 5, backgroundColor: '#B9E4C9' }}
+                                                onPress={() => this.onRoomPress(item.id, item.name)}
+                                                badge={item.unreadMsgs ? { value: "", textStyle: { color: 'orange' }, containerStyle: { color: 'red', marginTop: -20 } } : null}
+                                            />
+                                        ))
+                                    }
+                                </View> : <Text>У вас ще немає діалогів</Text>}
                         </View>}
                 </ScrollView>
             </View>
