@@ -31,7 +31,7 @@ const Main = TabNavigator({
           },
           Chat: {
             icon: <Icon size={24} color="white" name="chat" />,
-            label: 'Заходи',
+            label: 'Чат',
             barBackgroundColor: '#00796B'
           },
           Meetings: {

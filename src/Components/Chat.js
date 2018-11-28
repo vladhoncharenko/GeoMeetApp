@@ -84,11 +84,12 @@ class Chat extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false} style={{ marginLeft: 30, marginRight: 30 }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ marginLeft: 10, marginRight: 10 }}>
                     {!this.state.isLoading &&
                         <View>
                             {this.state.rooms.length !== 0 ?
                                 <View >
+                                    <Text style={[styles.promt]}>Ваші чати:</Text>
                                     {
                                         this.state.rooms.map((item, index) => (
                                             <ListItem
@@ -112,7 +113,12 @@ var styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFBE6'
-    }
+    },
+    promt: {
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold'
+      },
 });
 
 module.exports = createStackNavigator(

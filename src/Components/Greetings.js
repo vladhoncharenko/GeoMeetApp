@@ -13,28 +13,36 @@ const styles = StyleSheet.create({
 
 const slides = [
   {
-    key: 'somethun',
-    title: 'Title 1',
-    text: 'Description.\nSay something cool',
-    image: require('../../assets/tutorial/1.png'),
+    key: 'intro1',
+    title: 'Розвивайся!',
+    text: 'Шукай та відвідуй публічні заходи.',
+    image: require('../../assets/tutorial/intro1.jpeg'),
     imageStyle: styles.image,
-    backgroundColor: '#59b2ab',
+    backgroundColor: '#00766c',
   },
   {
-    key: 'somethun-dos',
-    title: 'Title 2',
-    text: 'Other cool stuff',
-    image: require('../../assets/tutorial/2.png'),
+    key: 'intro2',
+    title: 'Спілкуйся!',
+    text: 'Знайомся з новими людьми',
+    image: require('../../assets/tutorial/intro2.jpg'),
     imageStyle: styles.image,
-    backgroundColor: '#febe29',
+    backgroundColor: '#0069c0',
   },
   {
-    key: 'somethun1',
-    title: 'Rocket guy',
-    text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
-    image: require('../../assets/tutorial/3.png'),
+    key: 'intro3',
+    title: 'Створюй!',
+    text: 'Будуй нові команди, створюй публічні заходи!',
+    image: require('../../assets/tutorial/intro3.jpg'),
     imageStyle: styles.image,
-    backgroundColor: '#22bcb5',
+    backgroundColor: '#65499c',
+  },
+  {
+    key: 'intro4',
+    title: 'Угода користувача',
+    text: "Ви даєте згоду на:\n- Обробку ваших даних.\n- Відстеження вашої геопозиції навіть\nколи прогама не активна.\nПри переході далі ви підтверджуєте, що згодні з даними умовами.",
+    image: require('../../assets/tutorial/intro4.jpg'),
+    imageStyle: styles.image,
+    backgroundColor: '#b53d00',
   }
 ];
 
