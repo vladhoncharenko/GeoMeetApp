@@ -7,33 +7,36 @@ let Greetings = require('./src/Components/Greetings.js');
 let Main = require('./src/Components/Main.js');
 
 export default class App extends Component {
-
   state = {
     loaded: false
-  }
+  };
 
   setStateAsync(state) {
     return new Promise((resolve) => {
       this.setState(state, resolve)
     });
-  }
+  };
 
   async componentDidMount() {
-    let isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-    isLoggedIn = isLoggedIn === null ? false : true;
-    let isTutorialCompleted = await AsyncStorage.getItem('isTutorialCompleted');
-    isTutorialCompleted = isTutorialCompleted === null ? false : true;
+    try {
+      let isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+      isLoggedIn = isLoggedIn === null ? false : true;
+      let isTutorialCompleted = await AsyncStorage.getItem('isTutorialCompleted');
+      isTutorialCompleted = isTutorialCompleted === null ? false : true;
 
-    await this.setStateAsync({ isLoggedIn: JSON.parse(isLoggedIn) });
-    await this.setStateAsync({ isTutorialCompleted: JSON.parse(isTutorialCompleted) });
-    await this.setStateAsync({ loaded: true });
+      await this.setStateAsync({ isLoggedIn: JSON.parse(isLoggedIn) });
+      await this.setStateAsync({ isTutorialCompleted: JSON.parse(isTutorialCompleted) });
+      await this.setStateAsync({ loaded: true });
 
-    const fbView = Platform.OS === 'ios'
-      ? FBLoginManager.LoginBehaviors.Web
-      : FBLoginManager.LoginBehaviors.WebView;
+      const fbView = Platform.OS === 'ios'
+        ? FBLoginManager.LoginBehaviors.Web
+        : FBLoginManager.LoginBehaviors.WebView;
 
-    await FBLoginManager.setLoginBehavior(fbView);
-  }
+      await FBLoginManager.setLoginBehavior(fbView);
+    } catch (error) {
+      console.log("Error during app init: ", error)
+    }
+  };
 
   render() {
     console.disableYellowBox = true; // ToDo: Remove

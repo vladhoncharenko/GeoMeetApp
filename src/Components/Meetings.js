@@ -52,35 +52,38 @@ class Meetings extends React.Component {
         noResults: result.data.length > 0 ? false : true
       });
     } catch (error) {
-      console.log(error)
+      console.log("Error during meetings data update:", error)
     }
   };
 
   async onEventPress(data) {
-
-    let currentUser = await getCurrentUser();
-    let roomName = data.title;
-    let createdRoom = currentUser.rooms.filter((room) => room.name === roomName);
-    let roomId = "";
-    if (createdRoom.length === 0) {
-      let room = await currentUser.createRoom({
-        name: roomName,
-        private: true,
-        addUserIds: [data.userId]
-      });
-      roomId = room.id;
-    } else {
-      roomId = createdRoom[0].id;
+    try {
+      let currentUser = await getCurrentUser();
+      let roomName = data.title;
+      let createdRoom = currentUser.rooms.filter((room) => room.name === roomName);
+      let roomId = "";
+      if (createdRoom.length === 0) {
+        let room = await currentUser.createRoom({
+          name: roomName,
+          private: true,
+          addUserIds: [data.userId]
+        });
+        roomId = room.id;
+      } else {
+        roomId = createdRoom[0].id;
+      }
+      this.props.navigation.dispatch(StackActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'PrivateChat', params: { roomId: roomId, currentUser: currentUser, userId: currentUser.id, roomName: roomName } })
+        ],
+      }));
+    } catch (error) {
+      console.log("Error during meeting select:", error)
     }
-    this.props.navigation.dispatch(StackActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'PrivateChat', params: { roomId: roomId, currentUser: currentUser, userId: currentUser.id, roomName: roomName } })
-      ],
-    }));
-  }
+  };
 
-  renderDetail(rowData, sectionID, rowID) {
+  renderDetail(rowData) {
     let title = <Text style={[styles.title]}>{rowData.title}</Text>;
     var desc = null;
     if (rowData.description && rowData.imageUrl)

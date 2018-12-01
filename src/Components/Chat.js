@@ -2,13 +2,11 @@ import React from 'react'
 import { View, Text, AsyncStorage, StyleSheet, ScrollView } from 'react-native';
 import Radar from 'react-native-radar';
 import { createStackNavigator, StackActions, NavigationActions, HeaderBackButton } from 'react-navigation';
-let PrivateChat = require('./PrivateChat');
 import { ListItem } from 'react-native-elements';
 import getCurrentUser from "../chatUtils";
-
+let PrivateChat = require('./PrivateChat');
 
 class Chat extends React.Component {
-
     constructor() {
         super();
         this.state = {
@@ -28,13 +26,14 @@ class Chat extends React.Component {
 
         let isRadarInit = await AsyncStorage.getItem('isRadarInit');
         isRadarInit = isRadarInit === null ? false : true;
-        console.log("User:", userId);
+
         if (!isRadarInit) {
             Radar.setUserId(userId);
             Radar.setPlacesProvider('facebook');
             Radar.startTracking();
             AsyncStorage.setItem('isRadarInit', JSON.stringify(true));
         }
+
         Radar.trackOnce().then((res) => {
             console.log("TrackOnce result:", res);
         }).catch((err) => {
@@ -58,17 +57,12 @@ class Chat extends React.Component {
                 });
                 if (messages[0].id > cursor.position) {
                     this.currentUser.rooms[index].unreadMsgs = true;
-
                 } else {
                     this.currentUser.rooms[index].unreadMsgs = false;
-
                 }
-
             }
         }
-
         this.setState({ rooms: this.currentUser.rooms, isLoading: false });
-
     };
 
     onRoomPress(roomId, roomName) {
@@ -84,18 +78,18 @@ class Chat extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false} style={{ marginLeft: 10, marginRight: 10 }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
                     {!this.state.isLoading &&
                         <View>
                             {this.state.rooms.length !== 0 ?
                                 <View >
                                     <Text style={[styles.promt]}>Ваші чати:</Text>
                                     {
-                                        this.state.rooms.map((item, index) => (
+                                        this.state.rooms.map((item) => (
                                             <ListItem
                                                 title={<Text>{item.name}</Text>}
                                                 key={item.id}
-                                                containerStyle={{ marginBottom: 5, backgroundColor: '#B9E4C9' }}
+                                                containerStyle={styles.chatItem}
                                                 onPress={() => this.onRoomPress(item.id, item.name)}
                                                 badge={item.unreadMsgs ? { value: "", textStyle: { color: 'orange' }, containerStyle: { color: 'red', marginTop: -20 } } : null}
                                             />
@@ -118,7 +112,15 @@ var styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
         fontWeight: 'bold'
-      },
+    },
+    scrollView: {
+        marginLeft: 10,
+        marginRight: 10
+    },
+    chatItem: {
+        marginBottom: 5,
+        backgroundColor: '#B9E4C9'
+    }
 });
 
 module.exports = createStackNavigator(

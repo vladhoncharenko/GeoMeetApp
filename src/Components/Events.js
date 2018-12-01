@@ -6,7 +6,7 @@ import MapView from "react-native-maps";
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import SliderEntry from './SliderEntry';
 import styles from '../styles/Events.style';
-import { createStackNavigator, StackActions, NavigationActions,HeaderBackButton } from 'react-navigation';
+import { createStackNavigator, StackActions, NavigationActions, HeaderBackButton } from 'react-navigation';
 import { BASE_URL } from '../consts';
 let PrivateChat = require('./PrivateChat');
 
@@ -80,28 +80,31 @@ class Events extends Component {
   };
 
   async updateData() {
-    let auth_token = await AsyncStorage.getItem('auth_token');
+    try {
+      let auth_token = await AsyncStorage.getItem('auth_token');
       let config = {
-        headers: {'x-amz-security-token':  auth_token}
+        headers: { 'x-amz-security-token': auth_token }
       };
-    axios.get(BASE_URL + "/geofences", config).then((events) => {
-
-      this.state = {
-        slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
-        markers: events.data,
-        isLoading: false,
-        noResults: events.data.length ===0
-      };
-      if(!this.state.noResults){
-        this.defaultRegion = {
-          latitude: parseFloat(this.state.markers[0].coordinate.latitude),
-          longitude: parseFloat(this.state.markers[0].coordinate.longitude),
-          latitudeDelta: LATITUD_DELTA,
-          longitudeDelta: LONGITUDE_DELTA
+      axios.get(BASE_URL + "/geofences", config).then((events) => {
+        this.state = {
+          slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
+          markers: events.data,
+          isLoading: false,
+          noResults: events.data.length === 0
         };
-      }
-      this.setState(this.state)
-    });
+        if (!this.state.noResults) {
+          this.defaultRegion = {
+            latitude: parseFloat(this.state.markers[0].coordinate.latitude),
+            longitude: parseFloat(this.state.markers[0].coordinate.longitude),
+            latitudeDelta: LATITUD_DELTA,
+            longitudeDelta: LONGITUDE_DELTA
+          };
+        }
+        this.setState(this.state)
+      });
+    } catch (error) {
+      console.log("Error during events data update", error);
+    }
   };
 
   parseCoords(coords) {
@@ -110,8 +113,8 @@ class Events extends Component {
       latitude: parseFloat(coords.latitude)
     };
   };
- 
-  
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -187,15 +190,15 @@ module.exports = createStackNavigator(
     PrivateChat: {
       screen: PrivateChat,
       navigationOptions: ({ navigation }) => ({
-          title: navigation.state.params.title,
-          headerLeft: (<HeaderBackButton onPress={() => navigation.dispatch(StackActions.reset({
-              index: 0,
-              actions: [
-                  NavigationActions.navigate({ routeName: 'Events' })
-              ],
-          }))} />)
+        title: navigation.state.params.title,
+        headerLeft: (<HeaderBackButton onPress={() => navigation.dispatch(StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'Events' })
+          ],
+        }))} />)
       }),
-  },
+    },
   },
   {
     initialRouteName: 'Events',

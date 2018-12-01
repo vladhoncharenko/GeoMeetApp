@@ -1,12 +1,12 @@
 
 import { NavigationComponent } from 'react-native-material-bottom-navigation-performance'
 import { TabNavigator } from 'react-navigation'
+import React from "react";
+import Icon from 'react-native-vector-icons/MaterialIcons'
 let Chat = require('./Chat.js');
 let Events = require('./Events');
 let Meetings = require('./Meetings');
 let Settings = require('./Settings');
-import React, { Component } from "react";
-import Icon from 'react-native-vector-icons/MaterialIcons'
 
 const Main = TabNavigator({
   Events: { screen: Events },

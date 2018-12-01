@@ -52,20 +52,20 @@ class Geetings extends React.Component {
     this.state = {
       isTutorialCompleted: this.props.isTutorialCompleted
     }
-  }
-  
+  };
+
   componentDidMount() {
     Radar.getPermissionsStatus().then((status) => {
       if (status === "DENIED" || status === "UNKNOWN") {
         Radar.requestPermissions(true);
       }
     });
-  }
+  };
 
   _onDone = async () => {
     await AsyncStorage.setItem('isTutorialCompleted', JSON.stringify(true));
     this.setState({ isTutorialCompleted: true });
-  }
+  };
 
   render() {
     if (this.state.isTutorialCompleted) {

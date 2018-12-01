@@ -1,8 +1,8 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { View, Text, ScrollView, AsyncStorage,StyleSheet} from 'react-native';
+import { View, Text, ScrollView, AsyncStorage, StyleSheet } from 'react-native';
 import { BASE_URL } from '../consts';
-import { ListItem , Button} from 'react-native-elements';
+import { ListItem, Button } from 'react-native-elements';
 import { FBLoginManager } from 'react-native-facebook-login';
 import RNRestart from 'react-native-restart';
 const axios = require('axios');
@@ -51,19 +51,17 @@ class Settings extends React.Component {
       let userId = await AsyncStorage.getItem('userId');
       let auth_token = await AsyncStorage.getItem('auth_token');
       var config = {
-        headers: {'x-amz-security-token':  auth_token}
+        headers: { 'x-amz-security-token': auth_token }
       };
       const events = await axios.get(BASE_URL + "users/" + userId + "/geofences", config);
       const userData = await axios.get(BASE_URL + "users/" + userId, config);
-
       this.setState({
         events: events.data,
         isLoading: false,
         value: { userName: userData.data.name, description: userData.data.description },
       });
-
     } catch (error) {
-      console.log(error)
+      console.log("Error during settings update:", error)
     }
   };
 
@@ -74,7 +72,7 @@ class Settings extends React.Component {
   static navigationOptions = {
     tabBarLabel: 'Налаштування',
     tabBarIcon: () => (<Icon size={24} color="white" name="settings" />)
-  }
+  };
 
   onFormChange(value) {
     this.setState({ value });
@@ -95,7 +93,7 @@ class Settings extends React.Component {
       await axios.put(BASE_URL + "users/" + userId, { profile: user });
       this.setState({ buttonState: true });
     } catch (error) {
-      console.log(error)
+      console.log("Error during settings saving", error)
     }
   };
 
@@ -108,13 +106,10 @@ class Settings extends React.Component {
 
     FBLoginManager.logout(function (error, data) {
       if (!error) {
-        console.log("logget out")
-
         RNRestart.Restart();
       } else {
         console.log(error, data);
       }
-
     });
   };
 
@@ -122,7 +117,7 @@ class Settings extends React.Component {
     try {
       let auth_token = await AsyncStorage.getItem('auth_token');
       var config = {
-        headers: {'x-amz-security-token':  auth_token}
+        headers: { 'x-amz-security-token': auth_token }
       };
       await axios.delete(BASE_URL + "geofences/" + id, config);
       this.setState({
@@ -131,14 +126,14 @@ class Settings extends React.Component {
         })
       });
     } catch (error) {
-      console.log(error)
+      console.log("Error during event delete:", error)
     }
   };
 
   render() {
     return (<View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} style={{marginLeft:30, marginRight:30}}>
-      <Text style={{marginTop:20}}></Text>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ marginLeft: 30, marginRight: 30 }}>
+        <Text style={{ marginTop: 20 }}></Text>
         <Form
           ref="form"
           type={User}
@@ -154,7 +149,7 @@ class Settings extends React.Component {
                 <ListItem
                   title={<Text>{item.name}</Text>}
                   key={item._id}
-                  containerStyle={{marginBottom:5, backgroundColor: '#B9E4C9'}}
+                  containerStyle={{ marginBottom: 5, backgroundColor: '#B9E4C9' }}
                   rightIcon={<Icon
                     name={'delete'}
                     size={20}
@@ -165,8 +160,8 @@ class Settings extends React.Component {
               ))
             }
           </View>}
-        <Button buttonStyle={{marginTop:50,elevation: 0}} title="Зберегти" onPress={() => this.save()} disabled={this.state.buttonState} />
-        <Button buttonStyle={{marginTop:10,elevation: 0}} title="Вийти з профілю" onPress={async () => await this.logout()} />
+        <Button buttonStyle={{ marginTop: 50, elevation: 0 }} title="Зберегти" onPress={() => this.save()} disabled={this.state.buttonState} />
+        <Button buttonStyle={{ marginTop: 10, elevation: 0 }} title="Вийти з профілю" onPress={async () => await this.logout()} />
       </ScrollView>
     </View>);
   }
@@ -174,32 +169,32 @@ class Settings extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: '#FFFBE6'
+    flex: 1,
+    backgroundColor: '#FFFBE6'
   },
   location: {
-      backgroundColor: '#FFFBE6',
-      margin: 25
+    backgroundColor: '#FFFBE6',
+    margin: 25
   },
   buttonText: {
-      fontSize: 18,
-      color: '#FD5523',
-      alignSelf: 'center'
+    fontSize: 18,
+    color: '#FD5523',
+    alignSelf: 'center'
   },
   button: {
-      height: 36,
-      backgroundColor: '#B9E4C9',
-      borderColor: '#B9E4C9',
-      borderWidth: 1,
-      borderRadius: 8,
-      marginBottom: 10,
-      alignSelf: 'stretch',
-      justifyContent: 'center'
+    height: 36,
+    backgroundColor: '#B9E4C9',
+    borderColor: '#B9E4C9',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
   },
   createEventBtn: {
-      position: 'absolute',
-      top: 32,
-      left: 24,
+    position: 'absolute',
+    top: 32,
+    left: 24,
   }
 });
 

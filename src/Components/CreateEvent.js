@@ -97,9 +97,8 @@ class CreateEvent extends Component {
             };
             await axios.post(BASE_URL + "/geofences", values, config);
         } catch (error) {
-            console.log(error);
+            console.log("Error during location creation:", error);
         }
-
         this.back(true);
     };
 
@@ -123,19 +122,23 @@ class CreateEvent extends Component {
     };
 
     getLocation() {
-        this.form = this.refs.form;
-        RNGooglePlacePicker.show((response) => {
-            if (response.didCancel) {
-                console.log('User cancelled GooglePlacePicker');
-            }
-            else if (response.error) {
-                console.log('GooglePlacePicker Error: ', response.error);
-            }
-            else {
-                const formValues = this.refs.form.getValue();
-                this.setState({ location: response, buttonState: !formValues });
-            }
-        })
+        try {
+            this.form = this.refs.form;
+            RNGooglePlacePicker.show((response) => {
+                if (response.didCancel) {
+                    console.log('User cancelled GooglePlacePicker');
+                }
+                else if (response.error) {
+                    console.log('GooglePlacePicker Error: ', response.error);
+                }
+                else {
+                    const formValues = this.refs.form.getValue();
+                    this.setState({ location: response, buttonState: !formValues });
+                }
+            });
+        } catch (error) {
+            console.log("Error during getting location:", error);
+        }
     };
 
     render() {
@@ -149,9 +152,7 @@ class CreateEvent extends Component {
                         options={options}
                         value={this.state.value}
                         onChange={this.onFormChange.bind(this)}
-
                     />
-
                     <TouchableHighlight style={styles.button} onPress={this.getLocation.bind(this)} underlayColor='#99d9f4'>
                         <Text style={styles.buttonText}>Вибрати локацію</Text>
                     </TouchableHighlight>

@@ -1,13 +1,12 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors } from './Events.style';
-
 const IS_IOS = Platform.OS === 'ios';
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
-function wp (percentage) {
+function wp(percentage) {
     const value = (percentage * viewportWidth) / 100;
     return Math.round(value);
-}
+};
 
 const slideHeight = viewportHeight * 0.36;
 const slideWidth = wp(75);
@@ -23,9 +22,9 @@ export default StyleSheet.create({
         width: itemWidth,
         height: slideHeight,
         paddingHorizontal: itemHorizontalMargin,
-        paddingBottom: 18, // needed for shadow
+        paddingBottom: 18,
         flex: 1,
-        marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
+        marginBottom: IS_IOS ? 0 : -1,
         backgroundColor: '#FFFBE6',
         borderTopLeftRadius: entryBorderRadius,
         borderTopRightRadius: entryBorderRadius,
@@ -46,7 +45,7 @@ export default StyleSheet.create({
     },
     imageContainer: {
         flex: 1,
-        marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
+        marginBottom: IS_IOS ? 0 : -1,
         backgroundColor: '#FFFBE6',
         borderTopLeftRadius: entryBorderRadius,
         borderTopRightRadius: entryBorderRadius,
@@ -56,7 +55,6 @@ export default StyleSheet.create({
     imageContainerEven: {
         backgroundColor: colors.black
     },
- 
     textContainer: {
         justifyContent: 'center',
         paddingTop: entryBorderRadius,
@@ -89,28 +87,26 @@ export default StyleSheet.create({
     },
     footerButtons: {
         flexDirection: 'row',
-             justifyContent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-      bottom: 0
-      },
-      icon: {
+        bottom: 0
+    },
+    icon: {
         color: 'white',
-      },
-      
-      iconRound: {
+    },
+    iconRound: {
         marginRight: 9,
         fontSize: 29,
-      },
-
+    },
     scrollView: {
         position: 'absolute',
         left: 0,
         right: 0,
         bottom: 30,
         zIndex: 10,
-      },
-      slideStyle: {
+    },
+    slideStyle: {
         flex: 1,
         borderRadius: 10,
         margin: 2,
@@ -119,16 +115,16 @@ export default StyleSheet.create({
         shadowOffset: { width: 0, height: 1 },
         shadowRadius: 2,
         backgroundColor: 'white',
-      },
-      slideTopRow: {
+    },
+    slideTopRow: {
         flex: 0.60,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         flexDirection: 'row',
         paddingVertical: 20,
         paddingHorizontal: 14,
-      },
-      slideIcon: {
+    },
+    slideIcon: {
         height: 43,
         width: 43,
         padding: 8,
@@ -137,17 +133,17 @@ export default StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: 'white',
         borderRadius: 43 / 2,
-      },
-      slideMeta: {
+    },
+    slideMeta: {
         paddingLeft: 8,
-        justifyContent:'center',
+        justifyContent: 'center',
         flex: 1,
-      },
-      slideMetaRow: {
+    },
+    slideMetaRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-      },
-      slideBottomRow: {
+    },
+    slideBottomRow: {
         flexDirection: 'row',
         paddingVertical: 20,
         paddingHorizontal: 22,
@@ -157,13 +153,41 @@ export default StyleSheet.create({
         borderBottomRightRadius: 10,
         justifyContent: 'space-between',
         alignItems: 'center',
-      },
-      header: {
+    },
+    header: {
         fontSize: 19,
         color: 'white',
-      },
-      subheader: {
+    },
+    subheader: {
         fontSize: 14,
         color: 'white',
-      },
+    },
+    name: {
+        color: "#FD5523",
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 5
+    },
+    date: {
+        color: "#356859",
+        fontWeight: "bold",
+        marginBottom: 1,
+        marginLeft: 10,
+        marginRight: 10
+    },
+    address: {
+        color: "#356859",
+        marginBottom: 5,
+        marginLeft: 10,
+        marginRight: 10
+    },
+    description: {
+        color: "#356859",
+        marginLeft: 10,
+        marginRight: 10
+    },
+    margin: {
+        marginRight: 40
+    }
 });
